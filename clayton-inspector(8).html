@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Clayton Inspector">
+<meta name="theme-color" content="#1E1E1E">
+<title>Clayton Hotel Düsseldorf — Room Inspection</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --copper: #C17F34;
+  --copper-dark: #A06A28;
+  --copper-light: #D4A054;
+  --copper-bg: #FDF5EC;
+  --dark: #1E1E1E;
+  --dark2: #3A3A3A;
+  --warm-white: #FAFAF5;
+  --cream: #F3EDE4;
+  --cream2: #E8E0D4;
+  --gray: #8A8478;
+  --gray2: #B5AFA5;
+  --border: #DDD5CA;
+  --green: #3A8F6E;
+  --green-bg: #EDF7F2;
+  --red: #C0392B;
+  --red-bg: #FDECEA;
+  --orange: #D4851F;
+  --orange-bg: #FEF4E8;
+  --purple: #7C3AED;
+  --purple-bg: #EDE9FE;
+  --card-bg: rgba(255,255,255,.92);
+  --glass: rgba(255,255,255,.75);
+  --r: 8px;
+  --rl: 14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Source Sans 3',sans-serif;color:var(--dark);-webkit-font-smoothing:antialiased;background:#1a1a1a}
+
+/* ── FULL-WIDTH APP WITH BG IMAGE ── */
+.app {
+  width:100%;
+  min-height:100vh;
+  position:relative;
+  background:
+    url('https://media.claytonhotels.com/image/upload/f_auto,c_auto,w_1920,q_auto/v1710849577/MigratedClaytonAssets/clayton-hotel-duesseldorf/superior_room_lj99bx.jpg') center center/cover no-repeat fixed;
+}
+.app::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background:rgba(243,237,228,.82);
+  z-index:0;
+  pointer-events:none;
+}
+.app > * { position:relative; z-index:1; }
+
+/* ── HEADER ── */
+.hdr {
+  padding:20px 24px 0;
+  position:sticky;top:0;z-index:100;
+  background:rgba(30,30,30,.7);
+  backdrop-filter:blur(16px);
+}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px}
+.hdr-logo{height:28px;filter:brightness(0) invert(1);opacity:.95}
+.hdr-date{font-size:12px;color:rgba(255,255,255,.5);text-align:center;padding-bottom:12px}
+.hdr-set{background:none;border:none;color:rgba(255,255,255,.6);cursor:pointer;padding:4px}
+
+/* ── NAV ── */
+.nav{display:flex;gap:2px;padding:0 24px 12px}
+.nb{flex:1;padding:9px 4px 8px;border:none;background:rgba(255,255,255,.08);color:rgba(255,255,255,.55);font-size:9.5px;font-weight:600;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;text-transform:uppercase;letter-spacing:.8px;border-radius:8px;transition:.2s}
+.nb:first-child{border-radius:8px 0 0 8px}.nb:last-child{border-radius:0 8px 8px 0}
+.nb.on{background:var(--copper);color:#fff}
+.nb svg{opacity:.6;width:16px;height:16px}.nb.on svg{opacity:1}
+
+/* ── CONTENT ── */
+.cnt{padding:20px 24px 40px;display:none;max-width:900px;margin:0 auto}
+.cnt.vis{display:block;animation:fi .3s ease}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── TYPOGRAPHY ── */
+.serif{font-family:'Libre Baskerville',serif}
+.h1{font-family:'Libre Baskerville',serif;font-size:24px;font-weight:700;color:var(--dark);line-height:1.3}
+.h2{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;color:var(--dark)}
+.h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--gray)}
+.sub{font-size:13px;color:var(--gray)}
+
+/* ── CARDS ── */
+.card{background:var(--card-bg);backdrop-filter:blur(8px);border:1px solid var(--border);border-radius:var(--rl);padding:18px;margin-bottom:14px;transition:box-shadow .2s}
+.card:hover{box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.card-accent{border-left:4px solid var(--copper)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 22px;border:none;border-radius:var(--r);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.2px}
+.b1{background:var(--copper);color:#fff}.b1:hover{background:var(--copper-dark);box-shadow:0 4px 12px rgba(193,127,52,.3)}
+.b2{background:var(--green);color:#fff}
+.b3{background:var(--red);color:#fff}
+.b0{background:var(--card-bg);border:1.5px solid var(--border);color:var(--dark2)}.b0:hover{border-color:var(--copper);color:var(--copper)}
+.bs{padding:8px 14px;font-size:12px}.bf{width:100%}.btn:disabled{opacity:.3;cursor:not-allowed}
+
+/* ── FORM ── */
+.fg{margin-bottom:16px}
+.lbl{display:block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--gray);margin-bottom:6px}
+input[type=text],input[type=password],select,textarea{width:100%;padding:12px 16px;border:1.5px solid var(--border);border-radius:var(--r);font-family:inherit;font-size:14px;color:var(--dark);background:var(--warm-white);transition:.2s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--copper);box-shadow:0 0 0 3px rgba(193,127,52,.1)}
+textarea{min-height:70px;resize:vertical}
+select{appearance:none;cursor:pointer}
+
+/* ── SEARCH ── */
+.srch{position:relative;margin-bottom:12px}
+.srch svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray2);pointer-events:none}
+.srch input{padding-left:42px}
+
+/* ── PILLS ── */
+.pills{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+.pills::-webkit-scrollbar{height:0}
+.pill{flex-shrink:0;padding:7px 16px;border:1.5px solid var(--border);border-radius:24px;background:var(--card-bg);color:var(--dark2);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:.2s;backdrop-filter:blur(4px)}
+.pill.on{background:var(--copper);color:#fff;border-color:var(--copper)}
+
+/* ── ROOM LIST ── */
+.rlist{max-height:360px;overflow-y:auto;border:1.5px solid var(--border);border-radius:var(--rl);background:var(--card-bg);backdrop-filter:blur(8px)}
+.rlist::-webkit-scrollbar{width:5px}.rlist::-webkit-scrollbar-thumb{background:var(--copper-light);border-radius:3px}
+.ri{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid var(--cream2);cursor:pointer;transition:.15s}
+.ri:last-child{border-bottom:none}.ri:hover{background:var(--copper-bg)}
+.rn{font-weight:700;font-size:18px;color:var(--dark);font-variant-numeric:tabular-nums}
+.rc{font-size:11px;color:var(--gray);background:var(--cream);padding:3px 10px;border-radius:6px;font-weight:500}
+
+/* ── BADGES/TAGS ── */
+.bdg{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.bdg-c{background:var(--green-bg);color:var(--green)}.bdg-i{background:var(--red-bg);color:var(--red)}.bdg-d{background:var(--cream);color:var(--gray)}
+.tag{display:inline-block;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.tag-s{background:var(--red-bg);color:var(--red)}.tag-v{background:var(--orange-bg);color:var(--orange)}.tag-sv{background:var(--purple-bg);color:var(--purple)}.tag-ok{background:var(--green-bg);color:var(--green)}
+
+/* ── PROGRESS ── */
+.prog{height:7px;background:var(--cream2);border-radius:4px;overflow:hidden;margin:8px 0}
+.pf{height:100%;border-radius:4px;transition:width .5s}
+
+/* ── STATS ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.stat{background:var(--card-bg);backdrop-filter:blur(8px);border:1px solid var(--border);border-radius:var(--rl);padding:18px 12px;text-align:center}
+.stat-v{font-family:'Libre Baskerville',serif;font-size:30px;font-weight:700;line-height:1}
+.stat-l{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--gray);margin-top:6px}
+
+/* ── ROOM HERO ── */
+.rh{position:relative;border-radius:var(--rl);overflow:hidden;margin-bottom:18px;height:160px;background:url('https://media.claytonhotels.com/image/upload/f_auto,c_auto,w_960,q_auto/v1710849577/MigratedClaytonAssets/clayton-hotel-duesseldorf/superior_room_lj99bx.jpg') center/cover}
+.rh::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,30,30,.4),rgba(30,30,30,.75))}
+.rh-c{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff}
+.rh-f{font-size:10px;opacity:.5;text-transform:uppercase;letter-spacing:3px}
+.rh-n{font-family:'Libre Baskerville',serif;font-size:48px;font-weight:700;line-height:1}
+.rh-cat{font-size:14px;opacity:.7;margin-top:4px;letter-spacing:.3px}
+
+/* ── UPLOAD ── */
+.upload{border:2px dashed var(--border);border-radius:var(--rl);padding:28px;text-align:center;cursor:pointer;transition:.2s;background:var(--cream)}
+.upload:hover{border-color:var(--copper);background:var(--copper-bg)}
+
+/* ── PHOTO GRID ── */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.pgi{position:relative;aspect-ratio:1;border-radius:var(--r);overflow:hidden;border:2px solid var(--border)}
+.pgi img{width:100%;height:100%;object-fit:cover}
+.pgr{position:absolute;top:5px;right:5px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700}
+.pgs{position:absolute;bottom:0;left:0;right:0;padding:4px 0;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#fff}
+
+/* ── AI CARD ── */
+.ai{background:var(--copper-bg);border:1px solid rgba(193,127,52,.2);border-radius:var(--rl);padding:16px;margin-top:10px}
+.ai-h{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--copper-dark);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+
+/* ── REPORT ENTRY ── */
+.rpt{border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:12px;background:var(--card-bg);backdrop-filter:blur(8px);transition:box-shadow .2s}
+.rpt:hover{box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.rpt-rm{font-family:'Libre Baskerville',serif;font-weight:700;font-size:17px}
+.rpt-img{width:100%;max-height:180px;object-fit:cover;border-radius:var(--r);margin:10px 0}
+
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;margin-top:12px}
+.tbl th{text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);padding:10px 8px;border-bottom:2px solid var(--border)}
+.tbl td{padding:10px 8px;font-size:13px;border-bottom:1px solid var(--cream2);vertical-align:top}
+
+/* ── MODALS ── */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.mo.vis{display:flex}
+.ms{background:var(--warm-white);border-radius:18px 18px 0 0;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;padding:22px 24px 34px;animation:su .3s ease}
+@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.mb-bar{width:40px;height:4px;background:var(--cream2);border-radius:2px;margin:0 auto 16px}
+.cf{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:none;align-items:center;justify-content:center;padding:24px}
+.cf.vis{display:flex}
+.cfb{background:#fff;border-radius:var(--rl);padding:28px;max-width:380px;width:100%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.15)}
+.cfb p{margin-bottom:20px;font-size:15px;line-height:1.5}
+
+/* ── MISC ── */
+.clb{background:var(--cream);border:1px solid var(--border);border-radius:var(--rl);padding:18px;text-align:center;margin-bottom:18px;display:none}
+.clb.vis{display:block}
+.clb h3{font-family:'Libre Baskerville',serif;font-size:15px}
+.clb p{font-size:12px;color:var(--gray);margin-top:3px}
+.empty{text-align:center;padding:48px 24px;color:var(--gray)}
+.divider{height:1px;background:var(--border);margin:20px 0}
+.pulse{animation:pls 1.5s infinite}
+@keyframes pls{0%,100%{opacity:1}50%{opacity:.3}}
+.flex{display:flex}.gap-2{gap:10px}.gap-1{gap:6px}.mt-2{margin-top:14px}.mt-3{margin-top:20px}.mb-2{margin-bottom:14px}.mb-1{margin-bottom:8px}
+.between{justify-content:space-between}.items-c{align-items:center}.items-s{align-items:flex-start}.wrap{flex-wrap:wrap}
+.hidden{display:none!important}
+
+/* ── FLOOR GRID ── */
+.fl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+
+/* ── SYNC INDICATOR ── */
+.sync-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+.sync-live{background:#3A8F6E;box-shadow:0 0 6px rgba(58,143,110,.5);animation:syncpulse 2s infinite}
+@keyframes syncpulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ── RESPONSIVE: iPHONE SE / SMALL (< 380px) ── */
+@media(max-width:380px){
+  .stats{grid-template-columns:1fr 1fr;gap:8px}
+  .stat{padding:12px 8px}
+  .stat-v{font-size:24px}
+  .stat-l{font-size:9px}
+  .nav{padding:0 8px 8px;gap:1px}
+  .nb{padding:8px 2px 7px;font-size:8px;letter-spacing:.5px}
+  .nb svg{width:14px;height:14px}
+  .cnt{padding:12px 12px 32px}
+  .hdr{padding:12px 12px 0}
+  .hdr-logo{height:22px}
+  .fl-grid{grid-template-columns:1fr}
+  .card{padding:14px;margin-bottom:10px}
+  .h2{font-size:15px}
+  .pgrid{grid-template-columns:repeat(2,1fr);gap:6px}
+  .rh-n{font-size:36px}
+  .rpt-rm{font-size:15px}
+  .btn{padding:10px 16px;font-size:13px}
+  .pills{gap:4px}
+  .pill{padding:5px 12px;font-size:11px}
+  .ri{padding:10px 12px}
+  .rn{font-size:16px}
+}
+
+/* ── RESPONSIVE: iPHONE STANDARD (381-430px) ── */
+@media(min-width:381px) and (max-width:430px){
+  .stats{grid-template-columns:1fr 1fr;gap:8px}
+  .stat-v{font-size:26px}
+  .nav{padding:0 12px 8px}
+  .nb{padding:9px 3px 8px;font-size:8.5px}
+  .cnt{padding:14px 14px 36px}
+  .hdr{padding:14px 14px 0}
+  .hdr-logo{height:24px}
+  .fl-grid{grid-template-columns:1fr}
+  .pgrid{grid-template-columns:repeat(3,1fr);gap:8px}
+  .rh-n{font-size:40px}
+}
+
+/* ── RESPONSIVE: iPHONE PRO MAX / LARGE PHONES (431-640px) ── */
+@media(min-width:431px) and (max-width:640px){
+  .stats{grid-template-columns:1fr 1fr}
+  .nav{padding:0 16px 10px}
+  .cnt{padding:16px 16px 40px}
+  .hdr{padding:16px 16px 0}
+  .fl-grid{grid-template-columns:1fr}
+}
+
+/* ── RESPONSIVE: iPAD MINI / iPAD (641-1024px) ── */
+@media(min-width:641px) and (max-width:1024px){
+  .stats{grid-template-columns:repeat(4,1fr)}
+  .cnt{padding:20px 28px 40px}
+  .fl-grid{grid-template-columns:repeat(2,1fr)}
+  .pgrid{grid-template-columns:repeat(4,1fr)}
+  .rlist{max-height:420px}
+  .rh{height:180px}
+}
+
+/* ── RESPONSIVE: DESKTOP (> 1024px) ── */
+@media(min-width:1025px){
+  .cnt{padding:24px 32px 48px;max-width:1100px}
+  .fl-grid{grid-template-columns:repeat(3,1fr)}
+  .pgrid{grid-template-columns:repeat(4,1fr)}
+  .rlist{max-height:480px}
+}
+
+/* ── iOS SAFE AREAS ── */
+@supports(padding-top: env(safe-area-inset-top)){
+  .hdr{padding-top:calc(16px + env(safe-area-inset-top))}
+  .cnt{padding-bottom:calc(40px + env(safe-area-inset-bottom))}
+}
+
+/* ── TOUCH TARGETS (mobile) ── */
+@media(hover:none) and (pointer:coarse){
+  .ri{padding:14px 16px;min-height:52px}
+  .btn{min-height:44px}
+  .bs{min-height:38px}
+  .pill{min-height:36px;padding:8px 16px}
+  .nb{min-height:48px}
+  .pgr{width:30px;height:30px;font-size:17px}
+}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="hdr">
+    <div class="hdr-top">
+      <img class="hdr-logo" src="https://media.claytonhotels.com/dalata-assets-2024/image/upload/f_auto,c_auto,w_3840,q_auto/v1710345077/Uploads/Clayton/Clayton_Logo_White_3b4d3c6086.png" alt="Clayton Hotels">
+      <button class="hdr-set" onclick="go('settings')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center"><div class="hdr-date" id="hd"></div><div id="sync-ind" style="font-size:10px;color:rgba(255,255,255,.5);display:flex;align-items:center"><span class="sync-dot sync-live"></span>Live</div></div>
+    <div class="nav">
+      <button class="nb on" data-page="dashboard" onclick="go('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</button>
+      <button class="nb" data-page="inspect" onclick="go('inspect')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Inspektion</button>
+      <button class="nb" data-page="report" onclick="go('report')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Reports</button>
+      <button class="nb" data-page="export" onclick="go('export')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</button>
+    </div>
+  </div>
+  <div class="cnt vis" id="pg-dashboard"></div>
+  <div class="cnt" id="pg-inspect"></div>
+  <div class="cnt" id="pg-report"></div>
+  <div class="cnt" id="pg-export"></div>
+  <div class="cnt" id="pg-settings"></div>
+  <div class="cnt" id="pg-room"></div>
+  <div class="mo" id="emo"><div class="ms" id="emo-c"></div></div>
+  <div class="cf" id="cdlg"><div class="cfb" id="cdlg-c"></div></div>
+</div>
+<script>
+const R=[{n:101,f:"1",c:"Executive Room"},{n:102,f:"1",c:"Deluxe"},{n:103,f:"1",c:"Deluxe"},{n:104,f:"1",c:"Deluxe"},{n:105,f:"1",c:"Executive Room"},{n:106,f:"1",c:"Deluxe"},{n:107,f:"1",c:"Executive Room"},{n:108,f:"1",c:"Deluxe"},{n:109,f:"1",c:"Deluxe"},{n:110,f:"1",c:"Executive Room"},{n:201,f:"2",c:"Deluxe"},{n:202,f:"2",c:"Deluxe"},{n:203,f:"2",c:"Deluxe"},{n:204,f:"2",c:"Deluxe"},{n:205,f:"2",c:"Deluxe"},{n:206,f:"2",c:"Deluxe"},{n:207,f:"2",c:"Deluxe"},{n:208,f:"2",c:"Executive Room"},{n:209,f:"2",c:"Executive Room"},{n:210,f:"2",c:"Executive Room"},{n:211,f:"2",c:"Executive Room"},{n:212,f:"2",c:"Deluxe"},{n:213,f:"2",c:"Deluxe"},{n:214,f:"2",c:"Deluxe"},{n:215,f:"2",c:"Executive Room"},{n:216,f:"2",c:"Deluxe"},{n:217,f:"2",c:"Deluxe"},{n:218,f:"2",c:"Deluxe"},{n:219,f:"2",c:"Deluxe"},{n:220,f:"2",c:"Deluxe"},{n:221,f:"2",c:"Deluxe"},{n:222,f:"2",c:"Deluxe"},{n:223,f:"2",c:"Deluxe"},{n:224,f:"2",c:"Deluxe"},{n:225,f:"2",c:"Deluxe"},{n:226,f:"2",c:"Deluxe"},{n:227,f:"2",c:"Executive Suite"},{n:228,f:"2",c:"Deluxe"},{n:229,f:"2",c:"Deluxe"},{n:230,f:"2",c:"Deluxe"},{n:231,f:"2",c:"Deluxe"},{n:232,f:"2",c:"Deluxe"},{n:233,f:"2",c:"Executive Suite"},{n:234,f:"2",c:"Executive Room"},{n:235,f:"2",c:"Executive Room"},{n:236,f:"2",c:"Executive Room"},{n:237,f:"2",c:"Executive Room"},{n:238,f:"2",c:"Executive Room"},{n:239,f:"2",c:"Executive Room"},{n:240,f:"2",c:"Executive Room"},{n:241,f:"2",c:"Executive Room"},{n:242,f:"2",c:"Executive Room"},{n:243,f:"2",c:"Executive Room"},{n:244,f:"2",c:"Deluxe"},{n:245,f:"2",c:"Deluxe"},{n:246,f:"2",c:"Deluxe"},{n:247,f:"2",c:"Deluxe"},{n:248,f:"2",c:"Deluxe"},{n:249,f:"2",c:"Deluxe"},{n:250,f:"2",c:"Executive Room"},{n:251,f:"2",c:"Deluxe"},{n:252,f:"2",c:"Deluxe"},{n:253,f:"2",c:"Executive Room"},{n:254,f:"2",c:"Deluxe"},{n:255,f:"2",c:"Junior Suite"},{n:261,f:"2",c:"Executive Suite"},{n:262,f:"2",c:"Executive Room"},{n:263,f:"2",c:"Executive Room"},{n:264,f:"2",c:"Executive Room"},{n:265,f:"2",c:"Executive Room"},{n:266,f:"2",c:"Executive Room"},{n:267,f:"2",c:"Executive Room"},{n:268,f:"2",c:"Executive Room"},{n:269,f:"2",c:"Executive Room"},{n:270,f:"2",c:"Executive Room"},{n:271,f:"2",c:"Executive Room"},{n:272,f:"2",c:"Executive Room"},{n:273,f:"2",c:"Executive Room"},{n:274,f:"2",c:"Executive Room"},{n:275,f:"2",c:"Executive Room"},{n:276,f:"2",c:"Executive Room"},{n:278,f:"2",c:"Junior Suite"},{n:279,f:"2",c:"Junior Suite"},{n:280,f:"2",c:"Junior Suite"},{n:281,f:"2",c:"Junior Suite"},{n:282,f:"2",c:"Junior Suite"},{n:283,f:"2",c:"Junior Suite"},{n:284,f:"2",c:"Executive Suite"},{n:285,f:"2",c:"Junior Suite"},{n:286,f:"2",c:"Junior Suite"},{n:287,f:"2",c:"Executive Room"},{n:288,f:"2",c:"Executive Room"},{n:289,f:"2",c:"Junior Suite"},{n:290,f:"2",c:"Executive Suite"},{n:291,f:"2",c:"Executive Room"},{n:292,f:"2",c:"Executive Room"},{n:293,f:"2",c:"Executive Room"},{n:294,f:"2",c:"Junior Suite"},{n:301,f:"3",c:"Deluxe"},{n:302,f:"3",c:"Deluxe"},{n:303,f:"3",c:"Deluxe"},{n:304,f:"3",c:"Deluxe"},{n:305,f:"3",c:"Deluxe"},{n:306,f:"3",c:"Deluxe"},{n:307,f:"3",c:"Deluxe"},{n:308,f:"3",c:"Executive Room"},{n:309,f:"3",c:"Executive Room"},{n:310,f:"3",c:"Executive Room"},{n:311,f:"3",c:"Deluxe"},{n:312,f:"3",c:"Deluxe"},{n:313,f:"3",c:"Deluxe"},{n:314,f:"3",c:"Deluxe"},{n:315,f:"3",c:"Executive Room"},{n:316,f:"3",c:"Deluxe"},{n:317,f:"3",c:"Deluxe"},{n:318,f:"3",c:"Deluxe"},{n:319,f:"3",c:"Deluxe"},{n:320,f:"3",c:"Executive Suite"},{n:321,f:"3",c:"Deluxe"},{n:322,f:"3",c:"Deluxe"},{n:323,f:"3",c:"Deluxe"},{n:324,f:"3",c:"Deluxe"},{n:325,f:"3",c:"Deluxe"},{n:326,f:"3",c:"Deluxe"},{n:327,f:"3",c:"Executive Suite"},{n:328,f:"3",c:"Deluxe"},{n:329,f:"3",c:"Deluxe"},{n:330,f:"3",c:"Deluxe"},{n:331,f:"3",c:"Deluxe"},{n:332,f:"3",c:"Deluxe"},{n:333,f:"3",c:"Executive Suite"},{n:334,f:"3",c:"Deluxe"},{n:335,f:"3",c:"Deluxe"},{n:336,f:"3",c:"Deluxe"},{n:337,f:"3",c:"Deluxe"},{n:338,f:"3",c:"Deluxe"},{n:339,f:"3",c:"Deluxe"},{n:340,f:"3",c:"Deluxe"},{n:341,f:"3",c:"Deluxe"},{n:342,f:"3",c:"Deluxe"},{n:343,f:"3",c:"Deluxe"},{n:344,f:"3",c:"Deluxe"},{n:345,f:"3",c:"Junior Suite"},{n:346,f:"3",c:"Executive Suite"},{n:347,f:"3",c:"Junior Suite"},{n:348,f:"3",c:"Executive Room"},{n:349,f:"3",c:"Junior Suite"},{n:350,f:"3",c:"Executive Room"},{n:351,f:"3",c:"Executive Room"},{n:352,f:"3",c:"Executive Room"},{n:353,f:"3",c:"Executive Room"},{n:354,f:"3",c:"Executive Room"},{n:355,f:"3",c:"Executive Room"},{n:356,f:"3",c:"Executive Room"},{n:357,f:"3",c:"Junior Suite"},{n:358,f:"3",c:"Junior Suite"},{n:359,f:"3",c:"Executive Room"},{n:360,f:"3",c:"Junior Suite"},{n:361,f:"3",c:"Executive Room"},{n:362,f:"3",c:"Junior Suite"},{n:363,f:"3",c:"Junior Suite"},{n:364,f:"3",c:"Junior Suite"},{n:365,f:"3",c:"Junior Suite"},{n:366,f:"3",c:"Junior Suite"},{n:367,f:"3",c:"Junior Suite"},{n:368,f:"3",c:"Executive Room"},{n:369,f:"3",c:"Junior Suite"},{n:370,f:"3",c:"Junior Suite"},{n:371,f:"3",c:"Junior Suite"},{n:372,f:"3",c:"Junior Suite"},{n:373,f:"3",c:"Executive Suite"},{n:374,f:"3",c:"Junior Suite"},{n:375,f:"3",c:"Junior Suite"},{n:376,f:"3",c:"Junior Suite"},{n:377,f:"3",c:"Executive Suite"},{n:378,f:"3",c:"Junior Suite"},{n:379,f:"3",c:"Junior Suite"},{n:380,f:"3",c:"Junior Suite"},{n:381,f:"3",c:"Junior Suite"},{n:382,f:"3",c:"Executive Suite"},{n:383,f:"3",c:"Executive Suite"},{n:384,f:"3",c:"Executive Room"},{n:385,f:"3",c:"Executive Room"},{n:386,f:"3",c:"Executive Room"},{n:387,f:"3",c:"Executive Suite"},{n:401,f:"4",c:"Deluxe"},{n:402,f:"4",c:"Deluxe"},{n:403,f:"4",c:"Deluxe"},{n:404,f:"4",c:"Deluxe"},{n:405,f:"4",c:"Deluxe"},{n:406,f:"4",c:"Deluxe"},{n:407,f:"4",c:"Deluxe"},{n:408,f:"4",c:"Executive Room"},{n:409,f:"4",c:"Executive Room"},{n:410,f:"4",c:"Executive Room"},{n:411,f:"4",c:"Executive Room"},{n:412,f:"4",c:"Executive Room"},{n:413,f:"4",c:"Executive Room"},{n:414,f:"4",c:"Executive Room"},{n:415,f:"4",c:"Executive Room"},{n:416,f:"4",c:"Deluxe"},{n:417,f:"4",c:"Deluxe"},{n:418,f:"4",c:"Deluxe"},{n:419,f:"4",c:"Deluxe"},{n:420,f:"4",c:"Executive Suite"},{n:421,f:"4",c:"Deluxe"},{n:422,f:"4",c:"Deluxe"},{n:423,f:"4",c:"Deluxe"},{n:424,f:"4",c:"Deluxe"},{n:425,f:"4",c:"Deluxe"},{n:426,f:"4",c:"Deluxe"},{n:427,f:"4",c:"Executive Suite"},{n:428,f:"4",c:"Deluxe"},{n:429,f:"4",c:"Deluxe"},{n:430,f:"4",c:"Deluxe"},{n:431,f:"4",c:"Deluxe"},{n:432,f:"4",c:"Deluxe"},{n:433,f:"4",c:"Executive Suite"},{n:434,f:"4",c:"Deluxe"},{n:435,f:"4",c:"Deluxe"},{n:436,f:"4",c:"Deluxe"},{n:437,f:"4",c:"Deluxe"},{n:438,f:"4",c:"Deluxe"},{n:439,f:"4",c:"Deluxe"},{n:440,f:"4",c:"Deluxe"},{n:441,f:"4",c:"Deluxe"},{n:442,f:"4",c:"Deluxe"},{n:443,f:"4",c:"Deluxe"},{n:444,f:"4",c:"Deluxe"},{n:445,f:"4",c:"Junior Suite"},{n:501,f:"5",c:"Deluxe"},{n:502,f:"5",c:"Deluxe"},{n:503,f:"5",c:"Deluxe"},{n:504,f:"5",c:"Deluxe"},{n:505,f:"5",c:"Deluxe"},{n:506,f:"5",c:"Deluxe"},{n:507,f:"5",c:"Deluxe"},{n:508,f:"5",c:"Executive Room"},{n:509,f:"5",c:"Business"},{n:510,f:"5",c:"Deluxe"},{n:511,f:"5",c:"Deluxe"},{n:512,f:"5",c:"Deluxe"},{n:513,f:"5",c:"Deluxe"},{n:514,f:"5",c:"Deluxe"},{n:515,f:"5",c:"Executive Room"},{n:516,f:"5",c:"Deluxe"},{n:517,f:"5",c:"Deluxe"},{n:518,f:"5",c:"Deluxe"},{n:519,f:"5",c:"Deluxe"},{n:520,f:"5",c:"Executive Suite"},{n:521,f:"5",c:"Deluxe"},{n:522,f:"5",c:"Deluxe"},{n:523,f:"5",c:"Deluxe"},{n:524,f:"5",c:"Deluxe"},{n:525,f:"5",c:"Deluxe"},{n:526,f:"5",c:"Deluxe"},{n:527,f:"5",c:"Deluxe"},{n:528,f:"5",c:"Executive Room"},{n:529,f:"5",c:"Deluxe"},{n:530,f:"5",c:"Deluxe"},{n:531,f:"5",c:"Deluxe"},{n:532,f:"5",c:"Deluxe"},{n:533,f:"5",c:"Junior Suite"},{n:601,f:"6",c:"Deluxe"},{n:602,f:"6",c:"Deluxe"},{n:603,f:"6",c:"Deluxe"},{n:604,f:"6",c:"Deluxe"},{n:605,f:"6",c:"Deluxe"},{n:606,f:"6",c:"Deluxe"},{n:607,f:"6",c:"Deluxe"},{n:608,f:"6",c:"Executive Room"},{n:609,f:"6",c:"Executive Room"},{n:610,f:"6",c:"Deluxe"},{n:611,f:"6",c:"Deluxe"},{n:612,f:"6",c:"Deluxe"},{n:613,f:"6",c:"Deluxe"},{n:614,f:"6",c:"Executive Suite"},{n:615,f:"6",c:"Deluxe"},{n:616,f:"6",c:"Deluxe"},{n:617,f:"6",c:"Deluxe"},{n:618,f:"6",c:"Deluxe"},{n:619,f:"6",c:"Deluxe"},{n:620,f:"6",c:"Deluxe"},{n:621,f:"6",c:"Deluxe"},{n:622,f:"6",c:"Executive Room"},{n:623,f:"6",c:"Deluxe"},{n:624,f:"6",c:"Deluxe"},{n:625,f:"6",c:"Deluxe"},{n:626,f:"6",c:"Deluxe"},{n:627,f:"6",c:"Executive Suite"},{n:701,f:"7",c:"Deluxe"},{n:702,f:"7",c:"Deluxe"},{n:703,f:"7",c:"Deluxe"},{n:704,f:"7",c:"Deluxe"},{n:705,f:"7",c:"Deluxe"},{n:706,f:"7",c:"Deluxe"},{n:707,f:"7",c:"Deluxe"},{n:708,f:"7",c:"Executive Room"},{n:709,f:"7",c:"Executive Room"},{n:710,f:"7",c:"Deluxe"},{n:711,f:"7",c:"Deluxe"},{n:712,f:"7",c:"Deluxe"},{n:713,f:"7",c:"Deluxe"},{n:714,f:"7",c:"Executive Suite"},{n:715,f:"7",c:"Deluxe"},{n:716,f:"7",c:"Deluxe"},{n:717,f:"7",c:"Deluxe"},{n:718,f:"7",c:"Deluxe"},{n:719,f:"7",c:"Deluxe"},{n:720,f:"7",c:"Executive Room"},{n:721,f:"7",c:"Deluxe"},{n:722,f:"7",c:"Deluxe"},{n:723,f:"7",c:"Deluxe"},{n:724,f:"7",c:"Deluxe"},{n:725,f:"7",c:"Junior Suite"},{n:801,f:"8",c:"Deluxe"},{n:802,f:"8",c:"Deluxe"},{n:803,f:"8",c:"Deluxe"},{n:804,f:"8",c:"Deluxe"},{n:805,f:"8",c:"Deluxe"},{n:806,f:"8",c:"Deluxe"},{n:807,f:"8",c:"Deluxe"},{n:808,f:"8",c:"Executive Room"},{n:809,f:"8",c:"Executive Room"},{n:810,f:"8",c:"Deluxe"},{n:811,f:"8",c:"Deluxe"},{n:812,f:"8",c:"Deluxe"},{n:813,f:"8",c:"Deluxe"},{n:814,f:"8",c:"Executive Suite"},{n:815,f:"8",c:"Deluxe"},{n:816,f:"8",c:"Deluxe"},{n:817,f:"8",c:"Deluxe"},{n:818,f:"8",c:"Deluxe"},{n:819,f:"8",c:"Deluxe"},{n:820,f:"8",c:"Deluxe"},{n:821,f:"8",c:"Deluxe"},{n:822,f:"8",c:"Deluxe"},{n:823,f:"8",c:"Junior Suite"},{n:824,f:"8",c:"Executive Room"},{n:825,f:"8",c:"Junior Suite"},{n:826,f:"8",c:"Executive Room"},{n:827,f:"8",c:"Executive Room"},{n:828,f:"8",c:"Executive Room"},{n:829,f:"8",c:"Executive Room"},{n:830,f:"8",c:"Executive Room"},{n:831,f:"8",c:"Executive Room"},{n:832,f:"8",c:"Executive Room"},{n:833,f:"8",c:"Executive Room"},{n:834,f:"8",c:"Executive Room"},{n:835,f:"8",c:"Junior Suite"},{n:836,f:"8",c:"Executive Room"},{n:837,f:"8",c:"Executive Room"},{n:838,f:"8",c:"Executive Room"},{n:839,f:"8",c:"Executive Room"},{n:840,f:"8",c:"Executive Room"},{n:841,f:"8",c:"Junior Suite"},{n:901,f:"9",c:"Deluxe"},{n:902,f:"9",c:"Deluxe"},{n:903,f:"9",c:"Deluxe"},{n:904,f:"9",c:"Deluxe"},{n:905,f:"9",c:"Deluxe"},{n:906,f:"9",c:"Deluxe"},{n:907,f:"9",c:"Deluxe"},{n:908,f:"9",c:"Executive Room"},{n:909,f:"9",c:"Executive Room"},{n:910,f:"9",c:"Deluxe"},{n:911,f:"9",c:"Deluxe"},{n:912,f:"9",c:"Deluxe"},{n:913,f:"9",c:"Deluxe"},{n:914,f:"9",c:"Executive Suite"},{n:915,f:"9",c:"Skyline Suite"},{n:916,f:"9",c:"Executive Room"},{n:917,f:"9",c:"Executive Room"},{n:918,f:"9",c:"Executive Room"},{n:919,f:"9",c:"Executive Room"},{n:920,f:"9",c:"Executive Room"},{n:921,f:"9",c:"Executive Room"},{n:922,f:"9",c:"Executive Room"},{n:923,f:"9",c:"Executive Room"},{n:924,f:"9",c:"Junior Suite"},{n:925,f:"9",c:"Executive Room"},{n:926,f:"9",c:"Executive Room"},{n:927,f:"9",c:"Executive Room"},{n:928,f:"9",c:"Executive Room"},{n:929,f:"9",c:"Executive Room"},{n:930,f:"9",c:"Junior Suite"},{n:2001,f:"2",c:"Junior Suite"},{n:2002,f:"2",c:"Executive Room"},{n:2003,f:"2",c:"Junior Suite"},{n:2004,f:"2",c:"Junior Suite"},{n:2005,f:"2",c:"Junior Suite"},{n:2006,f:"2",c:"Junior Suite"},{n:2007,f:"2",c:"Junior Suite"}];
+const FL=[...new Set(R.map(r=>r.f))].sort((a,b)=>+a-+b),DP=["Housekeeping","Maintenance","Engineering","Front Office","F&B"],TOT=R.length;
+let rp=[],cl=[],ak="",dc=false,pg="dashboard",ifl="all",iq="",ir=null,ph=[],rs=null,ra=false,ut={},ud={};
+const td=new Date().toISOString().split("T")[0];
+document.getElementById("hd").textContent=new Date().toLocaleDateString("de-DE",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+
+// ── FIREBASE REALTIME DATABASE ──
+firebase.initializeApp({
+  apiKey:"AIzaSyAsQ8TRAIMfpREXaTCUPfZTzdopGarFsiQ",
+  authDomain:"clayton-inspector.firebaseapp.com",
+  databaseURL:"https://clayton-inspector-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"clayton-inspector",
+  storageBucket:"clayton-inspector.firebasestorage.app",
+  messagingSenderId:"311942815065",
+  appId:"1:311942815065:web:6c05a9a5ed653b78c40048"
+});
+const db=firebase.database();
+const dayRef=db.ref('days/'+td);
+const cfgRef=db.ref('config');
+let fbReady=false;
+let saveLock=false;
+
+// Compress image to max 1024px width, JPEG 0.6 quality
+function compressImage(base64){
+  return new Promise(resolve=>{
+    const img=new Image();
+    img.onload=()=>{
+      const maxW=1024;
+      let w=img.width,h=img.height;
+      if(w>maxW){h=Math.round(h*(maxW/w));w=maxW}
+      const c=document.createElement('canvas');
+      c.width=w;c.height=h;
+      const ctx=c.getContext('2d');
+      ctx.drawImage(img,0,0,w,h);
+      // Use 0.6 quality — good balance of size vs detail for inspection
+      const result=c.toDataURL('image/jpeg',0.6);
+      console.log('Image compressed:',Math.round(base64.length/1024)+'KB →',Math.round(result.length/1024)+'KB');
+      resolve(result);
+    };
+    img.onerror=()=>resolve(base64);
+    img.src=base64;
+  });
+}
+
+// Save to Firebase — images already compressed at capture
+async function sv(){
+  if(saveLock)return;
+  saveLock=true;
+  try{
+    await dayRef.set({reports:rp,clean:cl,updated:Date.now()});
+  }catch(e){console.error('Firebase save error:',e)}
+  saveLock=false;
+}
+
+// ── INIT: Listen for realtime changes ──
+// API key: sync via Firebase so all devices have it
+cfgRef.child('apiKey').on('value',snap=>{
+  const k=snap.val();
+  if(k&&k!==ak){ak=k;if(pg==='settings')rS()}
+});
+
+dayRef.on('value',snap=>{
+  const data=snap.val();
+  if(!data){rp=[];cl=[];fbReady=true;render();updateSyncIndicator(true);return}
+  const newRp=data.reports||[];
+  const newCl=data.clean||[];
+  if(!fbReady||JSON.stringify(newRp.map(x=>x.id))!==JSON.stringify(rp.map(x=>x.id))||JSON.stringify(newCl)!==JSON.stringify(cl)){
+    rp=newRp;cl=newCl;
+    if(pg!=="room"||!ra){render()}
+    updateSyncIndicator(true);
+  }
+  fbReady=true;
+});
+
+// Check for new day
+db.ref('meta/currentDate').once('value').then(snap=>{
+  const storedDate=snap.val();
+  if(storedDate&&storedDate!==td){
+    dayRef.set({reports:[],clean:[],updated:Date.now()});
+    db.ref('meta/currentDate').set(td);
+  }else if(!storedDate){
+    db.ref('meta/currentDate').set(td);
+  }
+});
+
+function updateSyncIndicator(flash){
+  const el=document.getElementById("sync-ind");
+  if(!el)return;
+  el.innerHTML='<span class="sync-dot sync-live"></span>Live Sync';
+  if(flash){el.style.color='#3A8F6E';setTimeout(()=>{el.style.color=''},1500)}
+}
+
+function gst(n){return cl.includes(n)?"c":rp.some(r=>r.roomNumber===n)?"i":"p"}
+function gins(){return new Set([...cl,...new Set(rp.map(r=>r.roomNumber))]).size}
+function tc(t){return t==='Schaden'?'tag-s':t==='Verschmutzung'?'tag-v':t==='Schaden & Verschmutzung'?'tag-sv':'tag-ok'}
+function go(p){pg=p;if(p!=="room"){ir=null;ph=[];rs=null;ra=false;ut={};ud={}}document.querySelectorAll(".nb").forEach(b=>b.classList.toggle("on",b.dataset.page===p));render()}
+function render(){document.querySelectorAll(".cnt").forEach(c=>c.classList.remove("vis"));const e=document.getElementById("pg-"+pg);if(e)e.classList.add("vis");({dashboard:rD,inspect:rI,report:rR,export:rEx,settings:rS,room:rRm})[pg]?.()}
+
+function rD(){
+  const ins=gins(),pct=Math.round((ins/TOT)*100),dm=rp.filter(r=>r.issueType==='Schaden'||r.issueType==='Schaden & Verschmutzung').length,di=rp.filter(r=>r.issueType==='Verschmutzung'||r.issueType==='Schaden & Verschmutzung').length;
+  let h='';
+  h+=`<div class="stats"><div class="stat"><div class="stat-v" style="color:var(--copper)">${ins}<span style="font-size:14px;color:var(--gray)">/${TOT}</span></div><div class="stat-l">Geprüft</div></div><div class="stat"><div class="stat-v" style="color:var(--green)">${cl.length}</div><div class="stat-l">Clean</div></div><div class="stat"><div class="stat-v" style="color:var(--red)">${dm}</div><div class="stat-l">Schäden</div></div><div class="stat"><div class="stat-v" style="color:var(--orange)">${di}</div><div class="stat-l">Verschmutz.</div></div></div>`;
+  h+=`<div class="card"><div class="flex between items-c"><span class="h3">Tagesfortschritt</span><span style="font-size:16px;font-weight:700;color:var(--copper)">${pct}%</span></div><div class="prog"><div class="pf" style="width:${pct}%;background:var(--copper)"></div></div><div class="sub">${TOT-ins} Zimmer noch offen</div></div>`;
+  h+='<div class="h3 mt-3 mb-2">Etagen-Übersicht</div><div class="fl-grid">';
+  FL.forEach(f=>{const fr=R.filter(r=>r.f===f),d=new Set([...cl.filter(c=>fr.some(r=>r.n===c)),...rp.filter(r=>fr.some(rm=>rm.n===r.roomNumber)).map(r=>r.roomNumber)]).size,p=Math.round((d/fr.length)*100),ic=fr.filter(r=>rp.some(x=>x.roomNumber===r.n)).length,cc=fr.filter(r=>cl.includes(r.n)).length;
+  h+=`<div class="card" style="padding:14px"><div class="flex between items-c mb-1"><span style="font-family:'Libre Baskerville',serif;font-weight:700;font-size:15px">Etage ${f}</span><span class="sub">${d}/${fr.length}</span></div><div class="prog" style="height:5px"><div class="pf" style="width:${p}%;background:var(--green)"></div></div><div class="flex gap-2" style="font-size:11px;color:var(--gray);margin-top:4px"><span style="color:var(--green)">${cc} clean</span><span style="color:var(--red)">${ic} issues</span></div></div>`});
+  h+='</div>';
+  document.getElementById("pg-dashboard").innerHTML=h;
+}
+
+function rI(){
+  const fd=R.filter(r=>{if(ifl!=="all"&&r.f!==ifl)return false;if(iq&&!String(r.n).includes(iq)&&!r.c.toLowerCase().includes(iq.toLowerCase()))return false;return true});
+  let h='<div class="h2 mb-2">Zimmer auswählen</div>';
+  h+=`<div class="srch"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Zimmernummer oder Kategorie..." value="${iq}" oninput="iq=this.value;rI()"></div>`;
+  h+='<div class="pills"><button class="pill '+(ifl==="all"?"on":"")+'" onclick="ifl=\'all\';rI()">Alle</button>';
+  FL.forEach(f=>{h+=`<button class="pill ${ifl===f?"on":""}" onclick="ifl='${f}';rI()">${f}. OG</button>`});
+  h+=`</div><div class="sub" style="margin:8px 0">${fd.length} Zimmer</div><div class="rlist">`;
+  fd.forEach(r=>{const s=gst(r.n),b=s==="c"?'<span class="bdg bdg-c">✓ Clean</span>':s==="i"?'<span class="bdg bdg-i">⚠ Issue</span>':"",cb=!dc?`<button class="btn bs ${s==="c"?"b0":"b2"}" style="padding:6px 10px" onclick="event.stopPropagation();tgCl(${r.n})">✓</button>`:"";
+  h+=`<div class="ri" onclick="${dc?"":"openR("+r.n+")"}"><div class="flex items-c gap-2"><span class="rn">${r.n}</span><span class="rc">${r.c}</span></div><div class="flex items-c gap-1">${b}${cb}</div></div>`});
+  h+='</div>';document.getElementById("pg-inspect").innerHTML=h;
+}
+
+function rRm(){
+  const rd=R.find(r=>r.n===ir);if(!rd)return;
+  let h='<button class="btn b0 bs mb-2" onclick="go(\'inspect\')">← Zurück</button>';
+  h+=`<div class="rh"><div class="rh-c"><div class="rh-f">Etage ${rd.f}</div><div class="rh-n">${rd.n}</div><div class="rh-cat">${rd.c}</div></div></div>`;
+  h+=`<div class="fg"><div class="lbl">Fotos aufnehmen (${ph.length})</div><input type="file" id="phi" accept="image/*" capture="environment" multiple onchange="addPh(event)" style="display:none">`;
+  h+='<div class="upload" onclick="document.getElementById(\'phi\').click()"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gray)" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><p style="font-size:14px;margin-top:6px;color:var(--gray)">Tippen für Foto — mehrere Bilder möglich</p></div>';
+  if(ph.length>0){h+='<div class="pgrid">';ph.forEach((p,i)=>{let st="";if(rs&&rs[i]){const t=ut[i]||rs[i].type,bg=t==='Schaden'?'rgba(192,57,43,.85)':t==='Verschmutzung'?'rgba(212,133,31,.85)':t==='Schaden & Verschmutzung'?'rgba(124,58,237,.85)':'rgba(58,143,110,.85)',lb=t==='clean'?'OK':t==='Schaden & Verschmutzung'?'S+V':t;st=`<div class="pgs" style="background:${bg}">${lb}</div>`}else if(ra){st='<div class="pgs pulse" style="background:rgba(193,127,52,.85)">Analyse...</div>'}h+=`<div class="pgi"><img src="${p}"><button class="pgr" onclick="rmPh(${i})">×</button>${st}</div>`});h+='<div class="pgi" style="border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--cream)" onclick="document.getElementById(\'phi\').click()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gray)" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>'}
+  h+='</div>';
+  if(ph.length>0&&!rs&&!ra)h+=`<button class="btn b1 bf mt-2" onclick="runAI()">🔍 KI-Analyse starten (${ph.length} Bild${ph.length>1?'er':''})</button>`;
+  if(ra)h+=`<div class="ai mt-2"><div class="ai-h"><span class="pulse">🔍</span> Analysiere ${ph.length} Bilder...</div><div style="font-size:13px;color:var(--dark2)">Claude prüft auf Schäden und Verschmutzungen.</div></div>`;
+  if(rs){const ic=rs.filter((_,i)=>(ut[i]||rs[i].type)!=='clean').length;
+  h+=`<div class="mt-2"><div class="h3 mb-2">KI-Ergebnis: ${ic} Problem${ic!==1?'e':''}</div>`;
+  h+='<div style="background:var(--copper-bg);border:1px solid rgba(193,127,52,.25);border-radius:var(--rl);padding:12px 16px;margin-bottom:14px;font-size:13px;color:var(--dark2)"><strong style="color:var(--copper)">Pflicht:</strong> Bitte pro Bild den Typ bestätigen oder ändern.</div>';
+  rs.forEach((r,i)=>{const t=ut[i]||r.type,iss=t!=='clean',bc=!iss?'var(--green)':t==='Schaden'?'var(--red)':t==='Verschmutzung'?'var(--orange)':'var(--purple)';
+  h+=`<div class="card" style="padding:14px;border-left:4px solid ${bc}"><div class="flex gap-2 items-s"><img src="${ph[i]}" style="width:68px;height:68px;object-fit:cover;border-radius:8px;flex-shrink:0;cursor:pointer" onclick="showImg(${i})"><div style="flex:1;min-width:0"><div class="flex items-c gap-1 mb-1"><span style="font-weight:700;font-size:13px">Bild ${i+1}</span>`;
+  if(r.severity&&iss){const sc=r.severity==='schwer'?'var(--red)':r.severity==='mittel'?'var(--orange)':'var(--green)',sb=r.severity==='schwer'?'var(--red-bg)':r.severity==='mittel'?'var(--orange-bg)':'var(--green-bg)';h+=`<span class="bdg" style="background:${sb};color:${sc};font-size:9px">${r.severity.toUpperCase()}</span>`}
+  h+=`</div><div style="font-size:13px;color:var(--dark);line-height:1.45;margin-bottom:4px">${r.analysis||'Keine Beschreibung'}</div>`;
+  if(r.location)h+=`<div style="font-size:11px;color:var(--gray)">📍 ${r.location}</div>`;
+  if(r.rec)h+=`<div style="font-size:11px;color:var(--copper);margin-top:2px">💡 ${r.rec}</div>`;
+  h+='</div></div>';
+  h+=`<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--cream2)"><div class="lbl" style="margin-bottom:7px">Art des Problems *</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><button class="btn bs ${t==='Verschmutzung'?'b1':'b0'}" onclick="ut[${i}]='Verschmutzung';rRm()">🧹 Verschmutzung</button><button class="btn bs ${t==='Schaden'?'b1':'b0'}" onclick="ut[${i}]='Schaden';rRm()">⚠️ Schaden</button><button class="btn bs ${t==='Schaden & Verschmutzung'?'b1':'b0'}" onclick="ut[${i}]='Schaden & Verschmutzung';rRm()">⚠️🧹 Beides</button><button class="btn bs ${t==='clean'?'b2':'b0'}" onclick="ut[${i}]='clean';rRm()">✓ Kein Problem</button></div></div>`;
+  if(iss){const v=ud[i]||'';h+=`<div style="margin-top:10px"><input type="text" id="d${i}" value="${v.replace(/"/g,'&quot;')}" placeholder="Eigene Beschreibung (optional)..." style="font-size:13px" onchange="ud[${i}]=this.value"></div>`}
+  h+='</div>'});
+  h+=`<div class="fg mt-2"><div class="lbl">Zuständige Abteilung</div><select id="dps">${DP.map(d=>`<option ${d==="Housekeeping"?"selected":""}>${d}</option>`).join('')}</select></div>`;
+  const fi=rs.filter((_,i)=>(ut[i]||rs[i].type)!=='clean').length;
+  if(fi>0)h+=`<button class="btn b1 bf" onclick="submit()">${fi} Meldung${fi>1?'en':''} erstellen</button>`;
+  else h+='<button class="btn b2 bf" onclick="mkCl()">✓ Alles OK — Als Clean melden</button>';
+  h+='</div>'}
+  if(!ph.length&&!dc)h+='<button class="btn b2 bf mt-2" onclick="mkCl()">✓ Zimmer als Clean melden</button>';
+  document.getElementById("pg-room").innerHTML=h;
+}
+
+function rR(){
+  let h=`<div class="h2 mb-2">Heutige Meldungen (${rp.length})</div>`;
+  if(!rp.length){h+='<div class="empty"><p style="font-size:15px">Noch keine Meldungen heute.</p></div>';document.getElementById("pg-report").innerHTML=h;return}
+  rp.forEach(r=>{h+=`<div class="rpt"><div class="flex between items-s mb-1"><div><div class="rpt-rm">Zimmer ${r.roomNumber}</div><div class="sub">${new Date(r.timestamp).toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"})} Uhr${r.lastEdited?' (bearb.)':''}</div></div><span class="tag ${tc(r.issueType)}">${r.issueType}${r.severity?' · '+r.severity:''}</span></div>`;
+  if(r.image)h+=`<div style="position:relative;margin:10px 0"><img class="rpt-img" src="${r.image}" style="margin:0"><button onclick="rmImg('${r.id}')" style="position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700" title="Bild löschen">×</button></div>`;
+  if(r.description)h+=`<div style="font-size:14px;line-height:1.5;margin-bottom:6px">${r.description}</div>`;
+  h+=`<div class="sub">Abteilung: <strong style="color:var(--copper)">${r.department||"Housekeeping"}</strong></div>`;
+  if(r.aiAnalysis)h+=`<div class="ai"><div class="ai-h">🔍 KI-Analyse</div><div style="font-size:13px;color:var(--dark2);white-space:pre-line">${r.aiAnalysis}</div></div>`;
+  h+=`<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--cream2)"><button class="btn b0 bs" onclick="editR('${r.id}')">✏ Bearbeiten</button><button class="btn b0 bs" style="color:var(--red);border-color:var(--red)" onclick="cfDel('${r.id}')">🗑 Löschen</button>${r.image?`<button class="btn b0 bs" style="color:var(--orange);border-color:var(--orange)" onclick="rmImg('${r.id}')">🖼 Bild entf.</button>`:'<div></div>'}</div>`;
+  h+='</div>'});
+  const bd={};rp.forEach(r=>{const d=r.department||"Housekeeping";if(!bd[d])bd[d]=[];bd[d].push(r)});
+  h+='<div class="divider"></div><div class="h3 mb-2">Abteilungs-Report</div>';
+  Object.entries(bd).forEach(([d,items])=>{h+=`<div class="card card-accent"><div class="h2" style="font-size:15px;margin-bottom:6px">${d} (${items.length})</div><table class="tbl"><thead><tr><th>Zi.</th><th>Art</th><th>Beschreibung</th><th>Zeit</th></tr></thead><tbody>`;
+  items.forEach(i=>{h+=`<tr><td style="font-weight:700">${i.roomNumber}</td><td><span class="tag ${tc(i.issueType)}">${i.issueType}</span></td><td>${i.description?(i.description.length>50?i.description.substring(0,50)+'...':i.description):'-'}</td><td style="white-space:nowrap;color:var(--gray)">${new Date(i.timestamp).toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"})}</td></tr>`});h+='</tbody></table></div>'});
+  document.getElementById("pg-report").innerHTML=h;
+}
+
+function rEx(){
+  const ins=gins(),dm=rp.filter(r=>r.issueType==='Schaden'||r.issueType==='Schaden & Verschmutzung').length,di=rp.filter(r=>r.issueType==='Verschmutzung'||r.issueType==='Schaden & Verschmutzung').length;
+  const dateStr=new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  let h='<div class="h2 mb-2">Tagesreport exportieren</div>';
+  h+=`<div class="card"><div style="font-family:'Libre Baskerville',serif;font-weight:700;font-size:15px;margin-bottom:6px">Zusammenfassung — ${dateStr}</div><div class="sub" style="line-height:1.6;margin-bottom:12px">${ins} von ${TOT} Zimmern geprüft · ${cl.length} Clean · ${dm} Schäden · ${di} Verschmutzungen · ${rp.length} Meldungen gesamt</div>`;
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">';
+  h+='<button class="btn b1" onclick="exportCSV()">📊 CSV Export</button>';
+  h+='<button class="btn b0" onclick="exportJSON()">📋 JSON Export</button>';
+  h+='</div>';
+  h+='<button class="btn b0 bf mt-2" onclick="exportHTML()">🖨 Druckbarer Report (HTML)</button>';
+  h+='</div>';
+
+  if(rp.length>0){
+    h+='<div class="card"><div style="font-weight:700;margin-bottom:8px">Vorschau: Meldungen</div><table class="tbl"><thead><tr><th>Zimmer</th><th>Art</th><th>Abteilung</th><th>Beschreibung</th><th>Schwere</th><th>Zeit</th></tr></thead><tbody>';
+    rp.forEach(r=>{h+=`<tr><td style="font-weight:700">${r.roomNumber}</td><td><span class="tag ${tc(r.issueType)}">${r.issueType}</span></td><td>${r.department||'HK'}</td><td>${r.description?(r.description.length>60?r.description.substring(0,60)+'...':r.description):'-'}</td><td>${r.severity||'-'}</td><td style="white-space:nowrap;color:var(--gray)">${new Date(r.timestamp).toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"})}</td></tr>`});
+    h+='</tbody></table></div>';
+  }
+
+  h+='<div class="divider"></div>';
+  h+='<div class="card" style="border-left:4px solid var(--red)"><div style="font-weight:700;margin-bottom:6px">Tag abschließen & exportieren</div><p class="sub" style="line-height:1.6;margin-bottom:12px">Schließt den Tag ab, exportiert automatisch den CSV-Report und setzt alle Daten für den nächsten Tag zurück.</p>';
+  h+='<button class="btn b1 bf" onclick="cfCl()">Tag abschließen & CSV herunterladen</button></div>';
+
+  document.getElementById("pg-export").innerHTML=h;
+}
+
+function rS(){
+  let h='<div class="h2 mb-2">Einstellungen</div>';
+  h+=`<div class="card"><div style="font-family:'Libre Baskerville',serif;font-weight:700;font-size:15px;margin-bottom:10px">Anthropic API Key</div><p class="sub" style="margin-bottom:12px;line-height:1.6">Für die KI-Bildanalyse. Wird über Firebase gespeichert und ist automatisch auf allen Geräten verfügbar.</p>${ak?'<div style="margin-bottom:12px"><span class="bdg bdg-c">✓ Key hinterlegt (synced)</span></div>':''}<div class="fg"><input type="password" id="aki" value="${ak}" placeholder="sk-ant-..."></div><button class="btn b1 bf" onclick="svKey()">Speichern</button></div>`;
+  h+=`<div class="card"><div style="font-weight:700;margin-bottom:8px">Abteilungen</div><div class="flex wrap gap-1">${DP.map(d=>'<span class="bdg bdg-d">'+d+'</span>').join('')}</div></div>`;
+  h+='<div class="card"><div style="font-weight:700;margin-bottom:8px">Über die App</div><p class="sub" style="line-height:1.6">Clayton Hotel Düsseldorf — Room Inspector v6.0<br>Multi-Foto-Workflow mit KI-Batch-Analyse via Claude Sonnet.<br>Echtzeit-Synchronisation über Firebase — alle Änderungen erscheinen sofort auf allen Geräten.</p></div>';
+  document.getElementById("pg-settings").innerHTML=h;
+}
+
+// ── ACTIONS ──
+function openR(n){ir=n;ph=[];rs=null;ra=false;ut={};ud={};pg="room";document.querySelectorAll(".cnt").forEach(c=>c.classList.remove("vis"));document.getElementById("pg-room").classList.add("vis");rRm()}
+function tgCl(n){if(cl.includes(n))cl=cl.filter(r=>r!==n);else cl.push(n);sv();render()}
+function mkCl(){if(!cl.includes(ir))cl.push(ir);sv();go("inspect")}
+function addPh(e){
+  Array.from(e.target.files||[]).forEach(f=>{
+    const r=new FileReader();
+    r.onload=ev=>{
+      // Compress immediately on capture
+      compressImage(ev.target.result).then(compressed=>{
+        ph.push(compressed);
+        rRm();
+      });
+    };
+    r.readAsDataURL(f);
+  });
+  e.target.value="";
+}
+function rmPh(i){ph.splice(i,1);if(rs){rs.splice(i,1);if(!rs.length)rs=null;const nt={},nd={};Object.keys(ut).forEach(k=>{const ki=+k;if(ki<i)nt[ki]=ut[ki];else if(ki>i)nt[ki-1]=ut[ki]});Object.keys(ud).forEach(k=>{const ki=+k;if(ki<i)nd[ki]=ud[ki];else if(ki>i)nd[ki-1]=ud[ki]});ut=nt;ud=nd}rRm()}
+function showImg(i){document.getElementById("cdlg-c").innerHTML=`<img src="${ph[i]}" style="width:100%;border-radius:10px;margin-bottom:14px"><button class="btn b0 bf" onclick="document.getElementById('cdlg').classList.remove('vis')">Schließen</button>`;document.getElementById("cdlg").classList.add("vis")}
+async function runAI(){
+  if(!ph.length)return;ra=true;rs=null;rRm();
+  if(!ak||ak.length<10){rs=ph.map(()=>({type:'Verschmutzung',analysis:'Kein API-Key hinterlegt. Bitte in den Einstellungen eintragen.',severity:'?'}));ra=false;rRm();return}
+  const ct=[];
+  ph.forEach((img,i)=>{
+    // Ensure we send proper JPEG base64
+    const mt=img.startsWith("data:image/png")?"image/png":"image/jpeg";
+    const raw=img.split(",")[1];
+    if(!raw){console.error('Image '+i+' has no base64 data');return}
+    ct.push({type:"image",source:{type:"base64",media_type:mt,data:raw}});
+    ct.push({type:"text",text:`[Bild ${i+1}/${ph.length}]`});
+  });
+  ct.push({type:"text",text:`Du bist ein erfahrener Hotelinspektor im Clayton Hotel Düsseldorf. Analysiere die ${ph.length} Bilder aus einem Hotelzimmer.\n\nUNTERSCHEIDE KLAR:\nSCHADEN = strukturelle Beschädigung (Risse, Löcher, Dellen, kaputte Möbel/Lampen/Armaturen, abgeplatzte Farbe, defekte Sanitäranlagen, Wasserschäden, Schimmel, kaputte Fliesen, beschädigte Teppiche, defekte Elektronik)\nVERSCHMUTZUNG = Reinigungsbedarf (Flecken auf Teppich/Bettwäsche/Polstern/Wänden, Staub, Schmutz, Haare, Kalkablagerungen, verschmutzte Spiegel/Fenster, Müll, schmutzige Oberflächen)\nKEIN PROBLEM = Bild zeigt nichts Auffälliges\n\nBeschreibe SPEZIFISCH was du siehst. Antworte NUR mit JSON-Array:\n[{"bild":1,"typ":"Verschmutzung","schwere":"mittel","ort":"Teppich rechts vom Bett","beschreibung":"Brauner Fleck ca. 10cm, vermutlich Kaffee","empfehlung":"Professionelle Teppichreinigung"}]`});
+  try{
+    console.log('Sending AI request with',ph.length,'images, key starts with:',ak.substring(0,8)+'...');
+    const body=JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2000,messages:[{role:"user",content:ct}]});
+    console.log('Request body size:',Math.round(body.length/1024)+'KB');
+    const resp=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "x-api-key":ak,
+        "anthropic-version":"2023-06-01",
+        "anthropic-dangerous-direct-browser-access":"true"
+      },
+      body:body
+    });
+    console.log('Response status:',resp.status);
+    const data=await resp.json();
+    if(data.error){
+      console.error('API error:',data.error);
+      rs=ph.map(()=>({type:'Verschmutzung',analysis:'API-Fehler: '+(data.error.message||JSON.stringify(data.error)),severity:'?'}));
+      ra=false;rRm();return;
+    }
+    const txt=(data.content||[]).map(c=>c.text||'').join('');
+    console.log('AI response:',txt.substring(0,200));
+    const arr=JSON.parse(txt.replace(/```json|```/g,'').trim());
+    rs=arr.map(p=>({type:p.typ==='Schaden'?'Schaden':(p.typ==='Kein Problem'?'clean':'Verschmutzung'),severity:p.schwere||'?',location:p.ort||'',analysis:p.beschreibung||'',rec:p.empfehlung||''}));
+  }catch(e){
+    console.error('AI call failed:',e);
+    rs=ph.map(()=>({type:'Verschmutzung',analysis:'Verbindungsfehler: '+e.message+'. Prüfe API-Key und Internetverbindung.',severity:'?'}));
+  }
+  ra=false;rRm();
+}
+function submit(){if(!rs)return;const dept=document.getElementById("dps")?.value||"Housekeeping";rs.forEach((r,i)=>{const t=ut[i]||r.type;if(t==='clean')return;const cd2=ud[i]||document.getElementById('d'+i)?.value||'',ai=`${r.analysis}${r.location?' ('+r.location+')':''}${r.rec?'\n→ '+r.rec:''}`;rp.push({id:Date.now().toString()+Math.random().toString(36).substr(2,5),roomNumber:ir,issueType:t,description:cd2||ai,department:dept,image:ph[i],aiAnalysis:`${r.analysis}\nSchwere: ${r.severity}\nOrt: ${r.location}\nEmpfehlung: ${r.rec}`,severity:r.severity,timestamp:new Date().toISOString()})});sv();go("inspect")}
+async function svKey(){ak=document.getElementById("aki").value;await cfgRef.child('apiKey').set(ak);rS()}
+function cfCl(){document.getElementById("cdlg-c").innerHTML='<p style="font-family:\'Libre Baskerville\',serif;font-size:16px">Tag abschließen?</p><p class="sub" style="margin-top:6px">CSV-Report wird heruntergeladen. Danach werden alle heutigen Daten zurückgesetzt.</p><div class="flex gap-2" style="margin-top:16px"><button class="btn b0 bs" style="flex:1" onclick="document.getElementById(\'cdlg\').classList.remove(\'vis\')">Abbrechen</button><button class="btn b1 bs" style="flex:1" onclick="closeD()">Abschließen</button></div>';document.getElementById("cdlg").classList.add("vis")}
+async function closeD(){
+  exportCSV();
+  rp=[];cl=[];dc=false;
+  await dayRef.set({reports:[],clean:[],updated:Date.now()});
+  document.getElementById("cdlg").classList.remove("vis");
+  go("dashboard");
+}
+async function reopen(){dc=false;render()}
+
+// ── EXPORT FUNCTIONS ──
+function exportCSV(){
+  const date=new Date().toLocaleDateString('de-DE');
+  const ins=gins();
+  let csv='sep=;\n';
+  csv+='Clayton Hotel Düsseldorf - Tagesreport Zimmerinspektion\n';
+  csv+=`Datum;${date}\n`;
+  csv+=`Geprüft;${ins} von ${TOT}\n`;
+  csv+=`Clean;${cl.length}\n`;
+  csv+=`Meldungen;${rp.length}\n\n`;
+  csv+='Zimmer;Art;Schweregrad;Abteilung;Beschreibung;KI-Analyse;Uhrzeit\n';
+  rp.forEach(r=>{
+    const desc=(r.description||'').replace(/;/g,',').replace(/\n/g,' ');
+    const ai=(r.aiAnalysis||'').replace(/;/g,',').replace(/\n/g,' ');
+    const time=new Date(r.timestamp).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+    csv+=`${r.roomNumber};${r.issueType};${r.severity||'-'};${r.department||'Housekeeping'};${desc};${ai};${time}\n`;
+  });
+  csv+='\nClean-Zimmer\n';
+  csv+=cl.sort((a,b)=>a-b).join('; ')+'\n';
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`Clayton_Inspektion_${td}.csv`;a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportJSON(){
+  const data={
+    hotel:'Clayton Hotel Düsseldorf',
+    date:td,
+    dateFormatted:new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long',year:'numeric'}),
+    summary:{totalRooms:TOT,inspected:gins(),clean:cl.length,reports:rp.length},
+    cleanRooms:cl.sort((a,b)=>a-b),
+    reports:rp.map(r=>({room:r.roomNumber,type:r.issueType,severity:r.severity,department:r.department,description:r.description,aiAnalysis:r.aiAnalysis,time:new Date(r.timestamp).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})}))
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`Clayton_Inspektion_${td}.json`;a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportHTML(){
+  const date=new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const ins=gins();
+  const dm=rp.filter(r=>r.issueType==='Schaden'||r.issueType==='Schaden & Verschmutzung').length;
+  const di=rp.filter(r=>r.issueType==='Verschmutzung'||r.issueType==='Schaden & Verschmutzung').length;
+  const bd={};rp.forEach(r=>{const d=r.department||'Housekeeping';if(!bd[d])bd[d]=[];bd[d].push(r)});
+  let html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Clayton Inspektion ${td}</title><style>body{font-family:'Source Sans Pro',Arial,sans-serif;max-width:900px;margin:0 auto;padding:24px;color:#1e1e1e}h1{font-family:Georgia,serif;color:#C17F34;margin-bottom:4px}h2{font-family:Georgia,serif;font-size:18px;margin-top:24px;padding-bottom:6px;border-bottom:2px solid #E8E0D4}table{width:100%;border-collapse:collapse;margin:12px 0}th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#8A8478;padding:8px;border-bottom:2px solid #DDD5CA}td{padding:8px;font-size:13px;border-bottom:1px solid #E8E0D4}.stats{display:flex;gap:24px;margin:16px 0}.stat{text-align:center}.stat-v{font-family:Georgia,serif;font-size:28px;font-weight:700}.stat-l{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#8A8478}.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase}.tag-s{background:#FDECEA;color:#C0392B}.tag-v{background:#FEF4E8;color:#D4851F}.tag-sv{background:#EDE9FE;color:#7C3AED}@media print{body{padding:0}}</style></head><body>`;
+  html+=`<h1>Clayton Hotel Düsseldorf</h1><p style="color:#8A8478;margin-bottom:20px">Tagesreport Zimmerinspektion — ${date}</p>`;
+  html+=`<div class="stats"><div class="stat"><div class="stat-v" style="color:#C17F34">${ins}/${TOT}</div><div class="stat-l">Geprüft</div></div><div class="stat"><div class="stat-v" style="color:#3A8F6E">${cl.length}</div><div class="stat-l">Clean</div></div><div class="stat"><div class="stat-v" style="color:#C0392B">${dm}</div><div class="stat-l">Schäden</div></div><div class="stat"><div class="stat-v" style="color:#D4851F">${di}</div><div class="stat-l">Verschmutz.</div></div></div>`;
+  if(rp.length){
+    html+='<h2>Alle Meldungen</h2><table><thead><tr><th>Zimmer</th><th>Art</th><th>Schwere</th><th>Abteilung</th><th>Beschreibung</th><th>Zeit</th></tr></thead><tbody>';
+    rp.forEach(r=>{const tg=r.issueType==='Schaden'?'tag-s':r.issueType==='Schaden & Verschmutzung'?'tag-sv':'tag-v';html+=`<tr><td style="font-weight:700">${r.roomNumber}</td><td><span class="tag ${tg}">${r.issueType}</span></td><td>${r.severity||'-'}</td><td>${r.department||'HK'}</td><td>${(r.description||'-').replace(/\n/g,'<br>')}</td><td>${new Date(r.timestamp).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})}</td></tr>`});
+    html+='</tbody></table>';
+    Object.entries(bd).forEach(([d,items])=>{
+      html+=`<h2>${d} (${items.length})</h2><table><thead><tr><th>Zimmer</th><th>Art</th><th>Schwere</th><th>Beschreibung</th></tr></thead><tbody>`;
+      items.forEach(i=>{const tg=i.issueType==='Schaden'?'tag-s':i.issueType==='Schaden & Verschmutzung'?'tag-sv':'tag-v';html+=`<tr><td style="font-weight:700">${i.roomNumber}</td><td><span class="tag ${tg}">${i.issueType}</span></td><td>${i.severity||'-'}</td><td>${(i.description||'-').replace(/\n/g,'<br>')}</td></tr>`});
+      html+='</tbody></table>';
+    });
+  }
+  html+=`<h2>Clean-Zimmer (${cl.length})</h2><p style="color:#8A8478;line-height:1.8">${cl.sort((a,b)=>a-b).join(', ')}</p>`;
+  html+='</body></html>';
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`Clayton_Inspektion_${td}.html`;a.click();
+  URL.revokeObjectURL(url);
+}
+function cfDel(id){document.getElementById("cdlg-c").innerHTML=`<p>Meldung wirklich löschen?</p><div class="flex gap-2" style="margin-top:16px"><button class="btn b0 bs" style="flex:1" onclick="document.getElementById('cdlg').classList.remove('vis')">Abbrechen</button><button class="btn b3 bs" style="flex:1" onclick="delR('${id}')">Löschen</button></div>`;document.getElementById("cdlg").classList.add("vis")}
+function delR(id){rp=rp.filter(r=>r.id!==id);sv();document.getElementById("cdlg").classList.remove("vis");render()}
+function rmImg(id){
+  document.getElementById("cdlg-c").innerHTML=`<p>Bild aus dieser Meldung entfernen?</p><div class="flex gap-2" style="margin-top:16px"><button class="btn b0 bs" style="flex:1" onclick="document.getElementById('cdlg').classList.remove('vis')">Abbrechen</button><button class="btn b1 bs" style="flex:1" onclick="doRmImg('${id}')">Bild entfernen</button></div>`;
+  document.getElementById("cdlg").classList.add("vis");
+}
+function doRmImg(id){const r=rp.find(x=>x.id===id);if(r){r.image=null;r.lastEdited=new Date().toISOString()}sv();document.getElementById("cdlg").classList.remove("vis");render()}
+function editR(id){const r=rp.find(x=>x.id===id);if(!r)return;let h='<div class="mb-bar"></div><div class="flex between items-c mb-2"><div class="serif" style="font-size:18px;font-weight:700">Meldung bearbeiten</div><button class="btn b0 bs" style="padding:6px" onclick="document.getElementById(\'emo\').classList.remove(\'vis\')">✕</button></div>';
+h+=`<div style="font-size:15px;margin-bottom:12px">Zimmer <strong>${r.roomNumber}</strong></div>`;if(r.image)h+=`<img src="${r.image}" style="width:100%;max-height:200px;object-fit:cover;border-radius:10px;margin-bottom:14px">`;
+h+=`<div class="fg"><div class="lbl">Art des Problems</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><button class="btn bs et ${r.issueType==='Verschmutzung'?'b1':'b0'}" onclick="document.querySelectorAll('.et').forEach(b=>{b.classList.remove('b1');b.classList.add('b0')});this.classList.remove('b0');this.classList.add('b1');document.getElementById('et').value='Verschmutzung'">🧹 Verschmutzung</button><button class="btn bs et ${r.issueType==='Schaden'?'b1':'b0'}" onclick="document.querySelectorAll('.et').forEach(b=>{b.classList.remove('b1');b.classList.add('b0')});this.classList.remove('b0');this.classList.add('b1');document.getElementById('et').value='Schaden'">⚠️ Schaden</button><button class="btn bs et ${r.issueType==='Schaden & Verschmutzung'?'b1':'b0'}" onclick="document.querySelectorAll('.et').forEach(b=>{b.classList.remove('b1');b.classList.add('b0')});this.classList.remove('b0');this.classList.add('b1');document.getElementById('et').value='Schaden & Verschmutzung'">⚠️🧹 Beides</button></div><input type="hidden" id="et" value="${r.issueType}"></div>`;
+h+=`<div class="fg"><div class="lbl">Abteilung</div><select id="edp">${DP.map(d=>`<option ${d===r.department?'selected':''}>${d}</option>`).join('')}</select></div>`;
+h+=`<div class="fg"><div class="lbl">Beschreibung</div><textarea id="edd">${r.description||''}</textarea></div>`;
+h+=`<button class="btn b1 bf" onclick="svEd('${r.id}')">Änderungen speichern</button>`;
+document.getElementById("emo-c").innerHTML=h;document.getElementById("emo").classList.add("vis")}
+function svEd(id){const r=rp.find(x=>x.id===id);if(!r)return;r.issueType=document.getElementById("et").value;r.department=document.getElementById("edp").value;r.description=document.getElementById("edd").value;r.lastEdited=new Date().toISOString();sv();document.getElementById("emo").classList.remove("vis");render()}
+</script>
+</body>
+</html>
